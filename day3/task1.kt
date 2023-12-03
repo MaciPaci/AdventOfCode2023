@@ -4,10 +4,10 @@ import java.nio.file.Files
 import java.nio.file.Paths
 
 data class Number (
-    var value: Int,
+    val value: Int,
     val row: Int,
     val column: Int,
-    var length: Int,
+    val length: Int,
     var nextToSymbol: Boolean = false
 )
 

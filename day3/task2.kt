@@ -3,24 +3,24 @@ import java.io.InputStream
 import java.nio.file.Files
 import java.nio.file.Paths
 
-data class Number (
-    var value: Int,
+data class NumberWithStars (
+    val value: Int,
     val row: Int,
     val column: Int,
-    var length: Int,
+    val length: Int,
     var starsIndexes: MutableList<Int> = mutableListOf()
 )
 
 data class Star (
-    var index: Int,
-    var adjacentNumbers: MutableList<Number> = mutableListOf()
+    val index: Int,
+    val adjacentNumbers: MutableList<NumberWithStars> = mutableListOf()
 )
 
 fun main() {
     val filePath = "input.txt"
     val patternNumbers = "\\d+".toRegex()
     val patternStars = "[*]".toRegex()
-    val numbersList = mutableListOf<Number>()
+    val numbersList = mutableListOf<NumberWithStars>()
     val starsMap = mutableMapOf<Int, Star>()
     val file = File(filePath)
     val lineLength = file.bufferedReader().use { it.readLine() }.length
@@ -34,7 +34,7 @@ fun main() {
         val number = result.value.toInt()
         val range = result.range
 
-        val newNumber = Number(
+        val newNumber = NumberWithStars(
             number,
             range.first / (lineLength + 1),
             range.first % (lineLength + 1),
@@ -62,7 +62,7 @@ fun main() {
     println("Sum of numbers with symbol adjacent: $sumOfNumbers")
 }
 
-fun findStarsNearNumber(inputString: String, number: Number, lineLength: Int, lineCount: Int): MutableList<Int> {
+fun findStarsNearNumber(inputString: String, number: NumberWithStars, lineLength: Int, lineCount: Int): MutableList<Int> {
     val starsIndexes = mutableListOf<Int>()
     for (i in number.row-1..number.row+1) {
         if (i < 0 || i >= lineCount) {
