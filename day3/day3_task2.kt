@@ -17,7 +17,7 @@ data class Star (
 )
 
 fun main() {
-    val filePath = "input.txt"
+    val filePath = "./day3/input.txt"
     val patternNumbers = "\\d+".toRegex()
     val patternStars = "[*]".toRegex()
     val numbersList = mutableListOf<NumberWithStars>()
