@@ -16,24 +16,51 @@ enum class CardStrengthWithJokers(val symbol: Char, val strength: Int) {
 
 fun main() {
     val filePath = "./day7/input.txt"
-    val file = File(filePath)
-    val listOfHands = mutableListOf<Hand>()
+
+    val listOfHands = parseInputFileWithJokers(filePath)
+
+    val mapOfHandStrengths = HandStrengths.entries.associate { it.strength to mutableListOf<Hand>() }.toMutableMap()
+
+    calculateHandStrengthWithJokers(listOfHands, mapOfHandStrengths)
+
+    val sortedHands = sortHandsByCardStrength(mapOfHandStrengths)
+
+    val totalWinnings = calculateTotalWinnings(sortedHands)
+
+    println("Total winnings: $totalWinnings")
+}
+
+private fun calculateTotalWinnings(
+    sortedHands: Map<Int, List<Hand>>,
+): Int {
+    var rank = 1
     var totalWinnings = 0
+    sortedHands.mapValues { (_, hands) ->
+        hands.forEach { hand ->
+            hand.rank = rank
+            rank++
+            totalWinnings += hand.rank * hand.bid
+        }
+    }
+    return totalWinnings
+}
 
-    file.forEachLine { line ->
-        val splitLine = line.split(' ')
-        val cards = splitLine[0]
-        val bid = splitLine[1].toInt()
-        val cardsStrength = convertCardsToStrengthWithJokers(cards)
-        listOfHands.add(Hand(cards, bid, cardsStrength))
+private fun sortHandsByCardStrength(mapOfHandStrengths: MutableMap<Int, MutableList<Hand>>) =
+    mapOfHandStrengths.mapValues { (_, hands) ->
+        hands.sortedWith(
+            compareBy(
+                { it.cardsStrength[0] },
+                { it.cardsStrength[1] },
+                { it.cardsStrength[2] },
+                { it.cardsStrength[3] },
+                { it.cardsStrength[4] })
+        )
     }
 
-    val mapOfHandStrengths = mutableMapOf<Int, MutableList<Hand>>()
-    for (handStrength in HandStrengths.entries) {
-        mapOfHandStrengths[handStrength.strength] = mutableListOf()
-    }
-
-
+private fun calculateHandStrengthWithJokers(
+    listOfHands: List<Hand>,
+    mapOfHandStrengths: MutableMap<Int, MutableList<Hand>>
+) {
     listOfHands.forEach { hand ->
         val countedChars = hand.cards.groupingBy { it }.eachCount().toMutableMap()
         if (countedChars.containsKey(CardStrengthWithJokers.J.symbol)) {
@@ -72,29 +99,17 @@ fun main() {
             1 -> mapOfHandStrengths.getValue(HandStrengths.FIVE_OF_A_KIND.strength).add(hand)
         }
     }
-
-    val sortedHands = mapOfHandStrengths.mapValues { (_, hands) ->
-        hands.sortedWith(
-            compareBy(
-                { it.cardsStrength[0] },
-                { it.cardsStrength[1] },
-                { it.cardsStrength[2] },
-                { it.cardsStrength[3] },
-                { it.cardsStrength[4] })
-        )
-    }
-
-    var rank = 1
-    sortedHands.mapValues { (_, hands) ->
-        hands.forEach { hand ->
-            hand.rank = rank
-            rank++
-            totalWinnings += hand.rank * hand.bid
-        }
-    }
-
-    println("Total winnings: $totalWinnings")
 }
+
+private fun parseInputFileWithJokers(filePath: String) = File(filePath)
+    .readLines()
+    .map { line ->
+        val splitLine = line.split(' ')
+        val cards = splitLine[0]
+        val bid = splitLine[1].toInt()
+        val cardsStrength = convertCardsToStrengthWithJokers(cards)
+        Hand(cards, bid, cardsStrength)
+    }
 
 fun convertCardsToStrengthWithJokers(cards: String): List<Int> {
     val cardsStrength = cards.map { card ->
