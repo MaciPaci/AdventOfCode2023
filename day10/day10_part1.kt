@@ -103,43 +103,19 @@ fun main() {
     val indexOfS = pattern.find(input.replace("\n", ""))!!.range.first
     val rowOfS = indexOfS / lineLength
     val columnOfS = indexOfS % lineLength
-//    println("$rowOfS, $columnOfS")
 
     val grid = input.split('\n').map { it.toList() }
 
-
     val path = mutableListOf<Char>()
+    val pathIndexes = mutableListOf<Pair<Int, Int>>()
+
     traverse@ for (step in steps) {
-
-//
-//        calculatePath(rowOfS, columnOfS, step, grid, path)
-////        println(path)
-//        if (path.isNotEmpty()) {
-//            break
-//        }
-
-
-
-
-
         var nextRow = rowOfS + step.row
-        var nextColumn = columnOfS +step.column
-        var nextPipe = grid[rowOfS][columnOfS]
-        var finished = false
+        var nextColumn = columnOfS + step.column
+        var nextPipe: Char
         var nextStep = step
-//
-//        if (nextRow < 0
-//            || nextRow >= lineCount
-//            || nextColumn < 0
-//            || nextColumn >= lineLength
-//        ) {
-//            continue
-//        }
-//
-//        var nextPipe = grid[nextRow][nextColumn]
-//        println(nextPipe)
-        while (true) {
 
+        while (true) {
             if (nextRow < 0
                 || nextRow >= lineCount
                 || nextColumn < 0
@@ -149,39 +125,48 @@ fun main() {
             }
 
             nextPipe = grid[nextRow][nextColumn]
-//            println(nextPipe)
             if (nextPipe == 'S') {
                 break@traverse
             }
             if (canConnectPipes(nextPipe, nextStep.dir)) {
                 path.add(nextPipe)
+                pathIndexes.add(Pair(nextRow, nextColumn))
                 nextStep = pipe.getNextStep(nextPipe, nextStep.dir)
-                println("$nextPipe, $nextStep")
                 nextRow += nextStep.row
                 nextColumn += nextStep.column
-//                if (nextRow < 0
-//                    || nextRow >= lineCount
-//                    || nextColumn < 0
-//                    || nextColumn >= lineLength
-//                ) {
-//                    continue
-//                }
-//                nextPipe = grid[nextRow][nextColumn]
             } else {
                 path.clear()
                 break
             }
         }
-//        println("$nextPipe, $step")
-
-
-
-
-
     }
-    println(path)
     val furthestElementIndex = path.size / 2 + 1
     println("Steps needed: $furthestElementIndex")
+
+
+    /** PART 2 **/
+
+
+    val crossingBoundaries = listOf('|', 'L', 'J')
+    var sumOfInsidePoints = 0
+
+    grid.forEachIndexed { rowIndex, row ->
+        row.forEachIndexed { colIndex, point ->
+            var crossedCount = 0
+            if (Pair(rowIndex, colIndex) !in pathIndexes && row[colIndex] != 'S') {
+                for (i in colIndex until lineLength) {
+                    if (Pair(rowIndex, i) in pathIndexes && row[i] in crossingBoundaries) {
+                        crossedCount += 1
+                    }
+                }
+                if (crossedCount % 2 == 1) {
+                    sumOfInsidePoints += 1
+                }
+            }
+        }
+    }
+
+    println("Points enclosed by the loop: $sumOfInsidePoints")
 }
 
 fun canConnectPipes(nextPipe: Char, direction: Direction): Boolean {
@@ -207,12 +192,10 @@ fun calculatePath(
         return listOf()
     }
     val nextPipe = grid[nextRow][nextColumn]
-//    println(nextPipe)
     if (nextPipe != 'S') {
         if (canConnectPipes(nextPipe, step.dir)) {
             path.add(nextPipe)
             val newStep = pipe.getNextStep(nextPipe, step.dir)
-//            println(newStep)
             calculatePath(nextRow, nextColumn, newStep, grid, path)
         } else {
             path.clear()
