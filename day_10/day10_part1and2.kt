@@ -91,7 +91,7 @@ val steps = listOf(
     Step(Direction.SOUTH)
 )
 
-const val filePath = "./day10/input.txt"
+const val filePath = "./day_10/input.txt"
 val file = File(filePath)
 val lineLength = file.bufferedReader().use { it.readLine() }.length
 val lineCount = Files.lines(Paths.get(filePath)).count().toInt()
