@@ -19,7 +19,7 @@ data class Scratchcard (
 }
 
 fun main() {
-    val filePath = "./day4/input.txt"
+    val filePath = "./day04/input.txt"
     val scratchcardList = mutableListOf<Scratchcard>()
     var sumOfPoints = 0
 

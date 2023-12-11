@@ -1,7 +1,7 @@
 import java.io.File
 
 fun main() {
-    val filePath = "./day9/input.txt"
+    val filePath = "./day09/input.txt"
     var sumOfPredictionsPart1 = 0
     var sumOfPredictionsPart2 = 0
 

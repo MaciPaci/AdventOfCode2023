@@ -53,7 +53,7 @@ fun updateSeedProperty(
 }
 
 fun main() {
-    val filePath = "./day5/input.txt"
+    val filePath = "./day05/input.txt"
     val almanac = mutableMapOf<String, MutableList<Long>>(
         MapNames.SEEDS.mapName to mutableListOf(),
         MapNames.SEED_TO_SOIL.mapName to mutableListOf(),

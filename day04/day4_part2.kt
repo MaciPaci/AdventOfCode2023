@@ -16,7 +16,7 @@ data class ScratchcardMulti (
 }
 
 fun main() {
-    val filePath = "./day4/input.txt"
+    val filePath = "./day04/input.txt"
     val scratchcardMap = mutableMapOf<Int, ScratchcardMulti>()
     var sumOfCards = 0
 

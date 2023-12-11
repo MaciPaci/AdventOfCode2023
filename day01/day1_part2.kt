@@ -2,7 +2,7 @@ import java.io.File
 
 fun main() {
     var sum = 0
-    val filePath = "./day1/input.txt"
+    val filePath = "./day01/input.txt"
     val regexFirst = "(zero|one|two|three|four|five|six|seven|eight|nine|\\d)".toRegex()
     val regexLast = "(zero|one|two|three|four|five|six|seven|eight|nine|\\d)(?!(zero|ne|wo|hree|four|five|six|seven|ight|ine|\\d))".toRegex()
 

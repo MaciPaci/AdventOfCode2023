@@ -8,7 +8,7 @@ data class Race(
 )
 
 fun main() {
-    val filePath = "./day6/input.txt"
+    val filePath = "./day06/input.txt"
     val pattern = "(?<=\\:).*".toRegex()
     val file = File(filePath)
     val inputStream: InputStream = file.inputStream()

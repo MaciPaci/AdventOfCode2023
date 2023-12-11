@@ -4,7 +4,7 @@ import java.nio.file.Paths
 import kotlin.math.abs
 
 fun main() {
-    val filePath = "./day_11/input.txt"
+    val filePath = "./day11/input.txt"
     val file = File(filePath)
     val lineLength = file.bufferedReader().use { it.readLine() }.length
     val lineCount = Files.lines(Paths.get(filePath)).count().toInt()

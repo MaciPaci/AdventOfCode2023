@@ -7,7 +7,7 @@ data class NodeForGhosts(
 )
 
 fun main() {
-    val filePath = "./day8/input.txt"
+    val filePath = "./day08/input.txt"
 
     val input = File(filePath).readText().split("\n\n")
     val commands = input.first()

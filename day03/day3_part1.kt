@@ -12,7 +12,7 @@ data class Number (
 )
 
 fun main() {
-    val filePath = "./day3/input.txt"
+    val filePath = "./day03/input.txt"
     val patternNumbers = "\\d+".toRegex()
     val numbersList = mutableListOf<Number>()
     val file = File(filePath)

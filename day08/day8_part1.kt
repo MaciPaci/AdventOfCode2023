@@ -7,7 +7,7 @@ data class Node(
 )
 
 fun main() {
-    val filePath = "./day8/input.txt"
+    val filePath = "./day08/input.txt"
     val start = "AAA"
     val end = "ZZZ"
 

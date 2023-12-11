@@ -8,7 +8,7 @@ class Game (
 )
 
 fun main() {
-    val filePath = "./day2/input.txt"
+    val filePath = "./day02/input.txt"
     val maxRedCubes = 12
     val maxGreenCubes = 13
     val maxBlueCubes = 14

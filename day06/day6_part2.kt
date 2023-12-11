@@ -9,7 +9,7 @@ data class OneRace(
 )
 
 fun main() {
-    val filePath = "./day6/input.txt"
+    val filePath = "./day06/input.txt"
     val file = File(filePath)
     val inputStream: InputStream = file.inputStream()
     val inputString = inputStream.bufferedReader().use { it.readText() }

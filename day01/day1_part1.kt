@@ -2,7 +2,7 @@ import java.io.File
 
 fun main() {
     var sum = 0
-    val filePath = "./day1/input.txt"
+    val filePath = "./day01/input.txt"
     val regex = "\\d".toRegex()
 
     File(filePath).forEachLine { line ->

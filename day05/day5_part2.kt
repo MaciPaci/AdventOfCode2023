@@ -30,7 +30,7 @@ val almanac = mutableMapOf<String, MutableList<Range>>(
 )
 
 fun main() {
-    val filePath = "./day5/input.txt"
+    val filePath = "./day05/input.txt"
 
     val seedRanges = mutableListOf<Long>()
     val listOfSeedRanges = mutableListOf<SeedWithRange>()
