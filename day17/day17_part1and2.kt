@@ -57,7 +57,7 @@ fun main() {
      */
 
     val queueUltraCrucible: Queue<Pair<BlockNode, Int>> = LinkedList()
-    queueUltraCrucible.add(Pair(BlockNode(startNode.first, startNode.second, MoveDirection.RIGHT, -1), 0))
+    queueUltraCrucible.add(Pair(BlockNode(startNode.first, startNode.second, MoveDirection.RIGHT, 0), 0))
 
     val visitedUltraCrucible = calculateDistanceToTarget(queueUltraCrucible, grid, true)
     var heatLossUltraCrucible = Int.MAX_VALUE
@@ -104,10 +104,10 @@ private fun calculateDistanceToTarget(
                 currentNode.first.stepsInDirection + 1
             }
             if (ultraCrucible) {
-                if (!((stepsInDirection < 10 || n != currentNode.first.direction) &&
+                if (!((stepsInDirection <= 10 || n != currentNode.first.direction) &&
                             (n == currentNode.first.direction
                                     || currentNode.first.stepsInDirection >= 4
-                                    || currentNode.first.stepsInDirection == -1))
+                                    || currentNode.first.stepsInDirection == 0))
                 ) {
                     continue
                 }
