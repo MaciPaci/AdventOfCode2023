@@ -67,7 +67,6 @@ fun main() {
             && node.value < heatLossUltraCrucible
             && node.key.stepsInDirection >= 4
         ) {
-            println(node)
             heatLossUltraCrucible = node.value
         }
     }
