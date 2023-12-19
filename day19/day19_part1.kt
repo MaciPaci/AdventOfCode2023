@@ -46,7 +46,90 @@ fun main() {
     }
 
     println("Sum of rating of accepted parts: ${acceptedParts.fold(0) { sum: Int, machinePart: MachinePart -> sum + machinePart.getRatingSum() }}")
+
+    /**
+     * Part 2
+     */
+
+    val partRanges = newPartRanges()
+    val acceptedRanges = mutableListOf<MutableMap<String, IntRange>>()
+
+    runPartsThroughWorkflowsForRanges(workflows, startingWorkflow, partRanges, acceptedRanges)
+
+    var distinctCombinations = 0L
+    for (ratingMap in acceptedRanges) {
+        var mapSum = 1L
+        for ((_, range) in ratingMap) {
+            var diff = range.count()
+            if (range == 1..4000) {
+                diff = 4000
+            }
+            mapSum *= diff
+        }
+        distinctCombinations += mapSum
+    }
+
+    println("Distinct combination of ranges: $distinctCombinations")
 }
+
+fun newPartRanges(): MutableMap<String, IntRange> {
+    return mutableMapOf("x" to 1..4000, "m" to 1..4000, "a" to 1..4000, "s" to 1..4000)
+}
+
+private fun runPartsThroughWorkflowsForRanges(
+    workflows: MutableMap<String, MutableList<Workflow>>,
+    nextWorkflow: String,
+    partRanges: Map<String, IntRange>,
+    acceptedRanges: MutableList<MutableMap<String, IntRange>>
+) {
+    val partRangesCp = partRanges.toMutableMap()
+    val currentWorkflow = workflows[nextWorkflow]!!
+    for (workflow in currentWorkflow) {
+        val newRange: IntRange
+        val newRangeOpposite: IntRange
+        val newPartRangesCp = partRangesCp.toMutableMap()
+        when (workflow.rule) {
+            "<" -> {
+                newRange = partRangesCp[workflow.part]!!.first..workflow.value-1
+                newPartRangesCp[workflow.part] = newRange
+                newRangeOpposite = workflow.value..partRangesCp[workflow.part]!!.last
+                partRangesCp[workflow.part] = newRangeOpposite
+                if (workflow.next == "A") {
+                    acceptedRanges.add(newPartRangesCp)
+                    continue
+                } else if (workflow.next == "R") {
+                    continue
+                }
+                runPartsThroughWorkflowsForRanges(workflows, workflow.next, newPartRangesCp, acceptedRanges)
+            }
+
+            ">" -> {
+                newRange = workflow.value+1..partRangesCp[workflow.part]!!.last
+                newPartRangesCp[workflow.part] = newRange
+                newRangeOpposite = partRangesCp[workflow.part]!!.first..workflow.value
+                partRangesCp[workflow.part] = newRangeOpposite
+                if (workflow.next == "A") {
+                    acceptedRanges.add(newPartRangesCp)
+                    continue
+                } else if (workflow.next == "R") {
+                    continue
+                }
+                runPartsThroughWorkflowsForRanges(workflows, workflow.next, newPartRangesCp, acceptedRanges)
+            }
+
+            "!" -> {
+                if (workflow.next == "A") {
+                    acceptedRanges.add(newPartRangesCp)
+                    continue
+                } else if (workflow.next == "R") {
+                    continue
+                }
+                runPartsThroughWorkflowsForRanges(workflows, workflow.next, newPartRangesCp, acceptedRanges)
+            }
+        }
+    }
+}
+
 
 private fun runPartsThroughWorkflows(
     machinePart: MachinePart,
