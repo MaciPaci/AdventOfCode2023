@@ -1,6 +1,6 @@
 import java.io.File
 
-data class NodeForGhosts(
+private data class NodeForGhosts(
     val current: String,
     val left: String,
     val right: String
@@ -68,7 +68,7 @@ private fun calculatePathLength(
     }
 }
 
-fun findLCM(a: Long, b: Long): Long {
+private fun findLCM(a: Long, b: Long): Long {
     val larger = if (a > b) a else b
     val maxLcm = a * b
     var lcm = larger
@@ -81,7 +81,7 @@ fun findLCM(a: Long, b: Long): Long {
     return maxLcm
 }
 
-fun findLCMOfListOfNumbers(numbers: List<Int>): Long {
+private fun findLCMOfListOfNumbers(numbers: List<Int>): Long {
     var result = numbers[0].toLong()
     for (i in 1 until numbers.size) {
         result = findLCM(result, numbers[i].toLong())
