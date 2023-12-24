@@ -2,7 +2,7 @@ import java.io.File
 import java.util.LinkedList
 import java.util.Queue
 
-interface IModule {
+interface Module {
     fun receiveSignal(source: String, signal: Int): Int
     fun sendSignal(): Int
     fun getState(): String
@@ -10,7 +10,7 @@ interface IModule {
     val next: List<String>
 }
 
-class FlipFlop(override val name: String, override val next: List<String>) : IModule {
+class FlipFlop(override val name: String, override val next: List<String>) : Module {
     private var isOn = false
 
     override fun receiveSignal(source: String, signal: Int): Int {
@@ -34,7 +34,7 @@ class FlipFlop(override val name: String, override val next: List<String>) : IMo
     }
 }
 
-class Conjunction(override val name: String, override val next: List<String>) : IModule {
+class Conjunction(override val name: String, override val next: List<String>) : Module {
     private var connectedInputs: MutableMap<String, Int> = mutableMapOf()
 
     override fun receiveSignal(source: String, signal: Int): Int {
@@ -59,7 +59,7 @@ class Conjunction(override val name: String, override val next: List<String>) : 
     }
 }
 
-class Broadcaster(override val name: String, override val next: List<String>) : IModule {
+class Broadcaster(override val name: String, override val next: List<String>) : Module {
     private var receivedSignal: Int = 0
 
     override fun receiveSignal(source: String, signal: Int): Int {
@@ -126,13 +126,13 @@ private fun findLCMOfListOfNumbers(numbers: List<Long>): Long {
     return result
 }
 
-private fun calculateCyclesIntervals(moduleMap: MutableMap<String, IModule>): List<Long> {
+private fun calculateCyclesIntervals(moduleMap: MutableMap<String, Module>): List<Long> {
     val exitModule = "sq"
     val cyclesStartList = listOf("gd", "kg", "gt", "lf")
     val cycleIntervals = mutableListOf<Long>()
     for (start in cyclesStartList) {
         val signalQueue: Queue<Signal> = LinkedList()
-        cycle@ for (cycle in 1..4096) {
+        for (cycle in 1..4096) {
             val moduleListAsKey = mutableListOf<String>()
             moduleMap.forEach { module -> moduleListAsKey.add(module.value.getState()) }
             signalQueue.add(Signal("broadcaster", start, 0))
@@ -171,7 +171,7 @@ private fun getConjunctionWithInputs(input: List<String>): MutableMap<String, Mu
     return conjunctions
 }
 
-private fun countSignals(moduleMap: MutableMap<String, IModule>): Triple<Long, Long, Long> {
+private fun countSignals(moduleMap: MutableMap<String, Module>): Triple<Long, Long, Long> {
     val seenStates = mutableMapOf<List<String>, Int>()
     val signalQueue: Queue<Signal> = LinkedList()
     var highSignals = 0L
@@ -206,11 +206,11 @@ private fun countSignals(moduleMap: MutableMap<String, IModule>): Triple<Long, L
 private fun parseInputToModules(
     input: List<String>,
     conjunctions: MutableMap<String, MutableList<String>>
-): MutableMap<String, IModule> {
-    val moduleList = mutableMapOf<String, IModule>()
+): MutableMap<String, Module> {
+    val moduleList = mutableMapOf<String, Module>()
     input.forEach { line ->
         val configuration = line.split("->")
-        val module: IModule
+        val module: Module
         val name: String
         when {
             configuration.first().contains("%") -> {
